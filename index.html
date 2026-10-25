@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>My 2027 List</title>
+<!-- version: song-fix-3 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
@@ -295,7 +296,7 @@ function sched(){while(next<ac.currentTime+.4){const bar=Math.floor(step/8)%4,ch
 function startSynth(){if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)();master=ac.createGain();master.gain.value=.9;
   const dl=ac.createDelay();dl.delayTime.value=.375;const fb=ac.createGain();fb.gain.value=.35;master.connect(dl);dl.connect(fb);fb.connect(dl);dl.connect(ac.destination);master.connect(ac.destination)}
  ac.resume();next=ac.currentTime+.05;timer=setInterval(sched,100)}
-async function tryFiles(){song.preload='auto';for(const f of ['song.mp3','song.mp3.mp3','song.m4a','song.wav','song.ogg']){song.src=f;try{await song.play();mode='file';return true}catch(e){}}return false}
+async function tryFiles(){song.preload='auto';for(const f of ['song.mp3','song.mp3.mp3','song.m4a','song.wav','song.ogg']){song.src=f;try{await song.play();mode='file';toast('♪ Playing your song');return true}catch(e){}}return false}
 function play(){playing=true;dock.classList.add('on');
  if(mode==='file'){song.play().catch(()=>{});return}
  if(mode==='synth'&&ac){startSynth();return}
