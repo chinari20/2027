@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My 2027 List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#120b1f;--ink:#fff7ee;--gold:#ffc857}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:auto}
+body{background:var(--bg);color:var(--ink);font-family:'Poppins',system-ui,sans-serif;overflow-x:hidden}
+canvas#sky{position:fixed;inset:0;z-index:0;pointer-events:none}
+#bar{position:fixed;top:0;left:0;height:4px;width:0;background:linear-gradient(90deg,#ff4d8d,#ffc857,#4dd8ff);z-index:50}
+section{position:relative;z-index:1;min-height:100vh;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:12vh 6vw;text-align:center}
+h1,h2{font-family:'Playfair Display',Georgia,serif}
+/* intro overlay */
+#start{position:fixed;inset:0;z-index:100;background:radial-gradient(circle at 50% 40%,#3a1a5e,#0b0614);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:22px;text-align:center;padding:20px;transition:opacity .8s}
+#start h1{font-size:clamp(2rem,7vw,4rem);color:var(--gold)}
+#start p{opacity:.8;max-width:420px}
+button.btn{font:600 1rem 'Poppins',sans-serif;border:0;border-radius:50px;padding:16px 38px;cursor:pointer;color:#1a0b2e;background:linear-gradient(135deg,#ffc857,#ff8fab);box-shadow:0 0 30px #ff8fab88;animation:pulse 1.8s infinite}
+@keyframes pulse{50%{transform:scale(1.07)}}
+.link{color:var(--ink);opacity:.7;font-size:.85rem;background:none;border:0;cursor:pointer;text-decoration:underline}
+/* hero */
+#hero h1{font-size:clamp(3rem,13vw,9rem);line-height:1;background:linear-gradient(120deg,#ff4d8d,#ffc857,#4dd8ff,#ff4d8d);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 6s linear infinite}
+@keyframes flow{to{background-position:300% 0}}
+#type{font-size:clamp(1rem,3.2vw,1.6rem);margin-top:22px;min-height:2.4em;opacity:.9;font-weight:300}
+#count{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap;justify-content:center}
+#count div{background:#ffffff14;border:1px solid #ffffff30;backdrop-filter:blur(8px);border-radius:16px;padding:12px 18px;min-width:78px}
+#count b{display:block;font-size:1.8rem;color:var(--gold)}
+#count span{font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;opacity:.7}
+.hint{margin-top:40px;opacity:.6;animation:bob 1.6s infinite}
+@keyframes bob{50%{transform:translateY(10px)}}
+/* parts */
+.tag{letter-spacing:.4em;font-size:.8rem;color:var(--c);font-weight:600}
+.ico{font-size:4rem;margin:8px 0;filter:drop-shadow(0 0 20px var(--c));animation:float 3s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-12px) rotate(4deg)}}
+section h2{font-size:clamp(2.2rem,8vw,5rem);color:var(--c);text-shadow:0 0 40px var(--c)}
+.sub{font-style:italic;opacity:.7;margin-bottom:28px}
+.cards{display:grid;gap:14px;width:min(820px,100%)}
+.card{position:relative;text-align:left;padding:18px 22px 18px 64px;border-radius:18px;background:linear-gradient(135deg,#ffffff18,#ffffff08);border:1px solid #ffffff22;backdrop-filter:blur(10px);opacity:0;transform:translateY(40px) scale(.97);transition:all .7s cubic-bezier(.2,.8,.2,1);line-height:1.55}
+.card.show{opacity:1;transform:none}
+.card:hover{border-color:var(--c);box-shadow:0 0 28px -4px var(--c);transform:translateX(6px)}
+.card i{position:absolute;left:16px;top:50%;translate:0 -50%;width:34px;height:34px;border-radius:50%;background:var(--c);color:#14081f;font:700 .9rem 'Poppins';display:grid;place-items:center;font-style:normal}
+.card.big{font-size:1.15rem;font-weight:600;border-color:var(--c)}
+/* finale */
+#end h2{font-size:clamp(2.6rem,11vw,8rem);background:linear-gradient(120deg,#ffc857,#ff4d8d);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none}
+#end p{margin-top:16px;font-size:1.2rem;opacity:.85}
+
+/* focus + offer */
+.panel{width:min(560px,100%);background:#ffffff12;border:1px solid #ffffff30;border-radius:28px;padding:30px 22px;backdrop-filter:blur(12px)}
+#reason{min-height:5.5em;font-family:'Playfair Display',serif;font-size:clamp(1.1rem,3.4vw,1.5rem);line-height:1.5;color:var(--gold);transition:opacity .5s;display:flex;align-items:center;justify-content:center}
+#tm{font:900 clamp(3.5rem,16vw,6rem) 'Playfair Display',serif;margin:10px 0;text-shadow:0 0 30px #ff4d8d}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.row button{font:600 .9rem 'Poppins';border:1px solid #ffffff40;background:#ffffff14;color:var(--ink);border-radius:30px;padding:10px 20px;cursor:pointer}
+.row button.sel{background:var(--gold);color:#1a0b2e}
+.stats{display:flex;justify-content:center;gap:24px;margin-top:14px;font-size:.85rem;opacity:.85}
+.stats b{display:block;font-size:1.6rem;color:var(--gold)}
+#env{font-size:6rem;cursor:pointer;animation:float 2.4s ease-in-out infinite;filter:drop-shadow(0 0 24px var(--gold))}
+#letter{display:none;width:min(620px,100%);text-align:left;background:#fffaf0;color:#2b1d12;border-radius:10px;padding:30px;line-height:1.7;box-shadow:0 0 60px #ffc85799;animation:pop .8s}
+#letter.open{display:block}
+#letter h3{font-family:'Playfair Display',serif;color:#1a73e8;margin-bottom:10px}
+@keyframes pop{from{transform:scale(.6) rotate(-4deg);opacity:0}}
+#nm{padding:12px 18px;border-radius:30px;border:1px solid #ffffff50;background:#ffffff14;color:#fff;text-align:center;font:400 1rem 'Poppins',sans-serif;width:240px}
+
+/* plan, vision, toast */
+.todo{display:flex;gap:8px;margin:14px 0}
+.todo input{flex:1;padding:12px 16px;border-radius:30px;border:1px solid #ffffff40;background:#ffffff10;color:#fff;font:400 .95rem 'Poppins',sans-serif;min-width:0}
+.todo button{border:0;border-radius:30px;padding:0 20px;background:var(--gold);font:600 .9rem 'Poppins';cursor:pointer;color:#1a0b2e}
+#tl{list-style:none;text-align:left;max-height:260px;overflow:auto}
+#tl li{display:flex;align-items:center;gap:12px;padding:10px 6px;border-bottom:1px solid #ffffff18}
+#tl li.d span{text-decoration:line-through;opacity:.45}
+#tl input{width:20px;height:20px;accent-color:#ffc857}
+#tl span{flex:1}#tl b{cursor:pointer;opacity:.5}
+#pg{height:12px;border-radius:12px;background:#ffffff20;overflow:hidden;margin-top:6px}
+#pg i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff4d8d,#ffc857);transition:width .6s}
+#pt{font-size:.85rem;opacity:.8;margin-top:8px}
+.wall{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:22px;width:min(760px,100%)}
+.pol{background:#fffaf0;color:#2b1d12;padding:10px 10px 14px;border-radius:6px;box-shadow:0 10px 30px #0008;cursor:pointer;transition:transform .4s}
+.pol:nth-child(odd){transform:rotate(-3deg)}.pol:nth-child(even){transform:rotate(3deg)}
+.pol:hover{transform:rotate(0) scale(1.06);z-index:2}
+.pol div{aspect-ratio:1;background:#e8dfd0 center/cover;display:grid;place-items:center;font-size:2.6rem}
+.pol p{margin-top:10px;font:600 .85rem 'Poppins'}
+#amma{width:min(620px,100%);margin-top:34px;padding:22px;border-radius:20px;background:#ffffff12;border:1px dashed #ffc857}
+#amma textarea{width:100%;min-height:110px;background:none;border:0;color:var(--ink);font:italic 1.05rem/1.7 'Playfair Display',serif;resize:vertical;text-align:center;outline:none}
+#toast{position:fixed;top:18px;left:50%;translate:-50% -140%;z-index:90;max-width:min(520px,90vw);padding:14px 22px;border-radius:18px;background:#000000cc;border:1px solid var(--gold);font-size:.95rem;text-align:center;transition:translate .7s}
+#toast.show{translate:-50% 0}
+
+/* pages */
+main{display:contents}
+section{display:none!important;padding-bottom:130px}
+section.act{display:flex!important;animation:pgin .6s cubic-bezier(.2,.8,.2,1)}
+@keyframes pgin{from{opacity:0;transform:translateX(50px)}}
+#nav{position:fixed;left:50%;bottom:16px;translate:-50% 0;z-index:60;display:flex;align-items:center;gap:12px;background:#000000b0;border:1px solid #ffffff30;border-radius:40px;padding:8px 12px;backdrop-filter:blur(8px)}
+#nav button{font:600 .9rem 'Poppins',sans-serif;border:0;border-radius:30px;padding:11px 20px;cursor:pointer}
+#bk{background:#ffffff1a;color:var(--ink)}#nx{background:linear-gradient(135deg,#ffc857,#ff8fab);color:#1a0b2e}
+#bk:disabled{opacity:.3;cursor:default}
+#dots{display:flex;gap:6px}
+#dots i{width:8px;height:8px;border-radius:50%;background:#ffffff40;cursor:pointer;transition:all .3s}
+#dots i.on{background:var(--gold);width:22px;border-radius:8px}
+@media(max-width:560px){#dots{display:none}#dock{bottom:76px}}
+/* music dock */
+#dock{position:fixed;right:16px;bottom:16px;z-index:60;display:flex;gap:8px;align-items:center;background:#000000aa;border:1px solid #ffffff30;border-radius:40px;padding:8px 14px;backdrop-filter:blur(8px);font-size:.8rem}
+#dock button{background:none;border:0;color:var(--ink);font-size:1.3rem;cursor:pointer}
+#dock label{cursor:pointer;opacity:.75;text-decoration:underline}
+#eq{display:flex;gap:2px;align-items:flex-end;height:18px}
+#eq s{width:3px;background:var(--gold);height:4px;border-radius:2px}
+.on #eq s{animation:eq .8s infinite alternate}
+#eq s:nth-child(2){animation-delay:.2s}#eq s:nth-child(3){animation-delay:.4s}#eq s:nth-child(4){animation-delay:.1s}
+@keyframes eq{to{height:18px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<canvas id="sky"></canvas>
+<div id="bar"></div>
+
+<div id="start">
+  <h1>My 2027 List</h1>
+  <p>Put your headphones on. Turn the volume up. Remember why you started.</p>
+  <input id="nm" placeholder="Your name (optional)" maxlength="20">
+  <button class="btn" id="go">Tap to begin ✨</button>
+  <button class="link" id="mute">continue without music</button>
+</div>
+
+<section id="hero">
+  <h1>2027</h1>
+  <div id="type"></div>
+  <div id="count"></div>
+  <div class="hint">tap Next →</div>
+</section>
+
+<main id="parts"></main>
+
+
+<section id="focus" style="--c:#ff6b9d">
+  <div class="tag" style="color:#ff6b9d">STUDY MODE</div>
+  <h2 style="color:#ff6b9d;margin:8px 0 22px">Remember why. Then start.</h2>
+  <div class="panel">
+    <div id="reason"></div>
+    <div id="tm">25:00</div>
+    <div class="row" id="modes"><button class="sel" data-m="25">25 min</button><button data-m="45">45 min</button><button data-m="60">60 min</button></div>
+    <div class="row"><button id="st" style="background:var(--gold);color:#1a0b2e">Start focus</button><button id="rs">Reset</button></div>
+    <div class="stats"><div><b id="s1">0</b>sessions today</div><div><b id="s2">0</b>day streak</div><div><b id="s3">0</b>total mins</div></div>
+  </div>
+</section>
+
+<section id="plan" style="--c:#4dd8ff">
+  <div class="tag" style="color:#4dd8ff">TODAY’S PLAN</div>
+  <h2 style="color:#4dd8ff;margin:8px 0 18px">Small wins build big futures.</h2>
+  <div class="panel">
+    <div class="todo"><input id="ti" placeholder="e.g. Solve 10 DSA problems" maxlength="70"><button id="ta">Add</button></div>
+    <ul id="tl"></ul>
+    <div id="pg"><i></i></div><div id="pt"></div>
+    <div class="row"><button id="tc">Clear finished</button></div>
+  </div>
+</section>
+
+<section id="vision">
+  <div class="tag" style="color:#ff8fab">MY VISION WALL</div>
+  <h2 style="color:#ff8fab;margin:8px 0 6px">See it. Believe it. Earn it.</h2>
+  <p class="sub">Tap a frame to add your photo. It stays on your device.</p>
+  <div class="wall" id="wall"></div>
+  <div id="amma">
+    <div class="tag" style="color:#ffc857;margin-bottom:8px">A NOTE FROM AMMA 💛</div>
+    <textarea id="an" placeholder="Write what your mom would say on Offer Day..."></textarea>
+  </div>
+</section>
+
+<section id="offer">
+  <div class="tag" style="color:#ffc857">OFFER DAY</div>
+  <h2 style="color:#ffc857;margin:8px 0">Open it. It’s yours.</h2>
+  <div id="env">✉️</div>
+  <p class="hint" id="eh">tap the envelope</p>
+  <div id="letter">
+    <h3>Congratulations, <span class="who">Future Engineer</span>! 🎉</h3>
+    <p>We are delighted to offer you a position at your dream company. Your hard work, late nights and refusal to quit have paid off.</p>
+    <p style="margin-top:10px">Your parents are on the phone, your siblings are cheering, and your mom is smiling the biggest smile of her life.</p>
+    <p style="margin-top:10px"><b>Welcome to the team. You made it.</b></p>
+    <p style="margin-top:14px;font-style:italic;color:#8a6d3b">- Signed, You from 2027 💛</p>
+  </div>
+</section>
+<section id="end">
+  <div style="font-size:4rem">🏆</div>
+  <h2>I AM UNSTOPPABLE</h2>
+  <p>NOT immediately, but definitely.</p>
+  <p style="margin-top:30px;opacity:.6">See you on Offer Day. 💛</p>
+</section>
+
+<div id="nav"><button id="bk">← Back</button><div id="dots"></div><button id="nx">Next →</button></div>
+<div id="toast"></div>
+<input type="file" id="vf" accept="image/*" hidden>
+<div id="dock">
+  <div id="eq"><s></s><s></s><s></s><s></s></div>
+  <button id="play" aria-label="Play or pause music">🎵</button>
+  <label for="file">use my song</label>
+  <input type="file" id="file" accept="audio/*" hidden>
+</div>
+
+<!-- To use your own song when hosting: put song.mp3 next to this file and keep this tag. -->
+<audio id="song" src="song.mp3" loop preload="none"></audio>
+
+<script>
+const PARTS=[
+ {tag:"PART 1",name:"MY WHY",sub:"The Roots",c:"#ff6b9d",ico:"💛",items:[
+  "I have to win because I’m someone’s eldest daughter, someone’s big sister, and someone’s only hope.",
+  "Respect for my mom. Her sacrifices are the reason I raise my voice for her.",
+  "All sacrifices for my Amma’s smile.",
+  "Realising that your mom is also just a girl who never got to live her dreams.",
+  "Where many mothers prepare their daughters for marriage, my mom prepared me for life: for independence, for strength, for dreams beyond boundaries.",
+  "Respect for the family that stands by me.",
+  "One day your parents will say, “Everything we sacrificed was worth it.”",
+  "It’s my turn to show them the world they missed while raising me."]},
+ {tag:"PART 2",name:"MY FIRE",sub:"The Push",c:"#ff8a3d",ico:"🔥",items:[
+  "I decided to be the loudest daughter in the entire bloodline.",
+  "Working hard because I can’t digest it if a man says, “You’re nothing without me.”",
+  "Now “insulted” in the coming year, this is going to cost a lot. Be ready!",
+  "I am a woman who is obsessed with career, self-respect and loyalty.",
+  "Take the risk. Become who you’re destined to be."]},
+ {tag:"PART 3",name:"MY STRENGTH",sub:"The Mindset",c:"#b388ff",ico:"⚡",items:[
+  "I believe in myself! I can do it!",
+  "I am unstoppable.",
+  "Dream Big. Work Hard. Stay Focused.",
+  "Working late at night because normal hours were never enough for my dreams.",
+  "It takes time! You are making a career, not Maggi.",
+  "NOT immediately, but definitely.",
+  "You’re so close. Don’t give up!"]},
+ {tag:"PART 4",name:"MY GOALS",sub:"The Targets",c:"#4dd8ff",ico:"🎯",items:[
+  "Imagine your job at Google / Amazon / Microsoft / Cisco / Flipkart.",
+  "From @gmail.com to @google.com.",
+  "I want to be financially independent!",
+  "Driving my own car! 🚗",
+  "Buying my own house. 🏠",
+  "Helping my siblings get a better education and build their own futures, in their own way, like me."]},
+ {tag:"PART 5",name:"MY VICTORY",sub:"The Reward",c:"#ffc857",ico:"🎉",items:[
+  "Congratulations! You’ve been selected! “Offer Day”!",
+  "The day “I MADE IT!” Office visit to family.",
+  "Praying for my own success so my parents can proudly say they raised a successful daughter.",
+  "Trust me! There is no bigger festival than success, the day my parents say, “Beta, you made us proud beyond our imagination.”",
+  "Be the woman people look at and think, “Damn, she doesn’t quit.”",
+  "In 2027, I will be proud of myself!"]}
+];
+const host=document.getElementById('parts');let n=1;
+PARTS.forEach(p=>{
+  const s=document.createElement('section');s.style.setProperty('--c',p.c);
+  s.innerHTML=`<div class="tag">${p.tag}</div><div class="ico">${p.ico}</div><h2>${p.name}</h2><div class="sub">${p.sub}</div><div class="cards"></div>`;
+  const box=s.querySelector('.cards');
+  p.items.forEach(t=>{const d=document.createElement('div');d.className='card'+(t.length<45?' big':'');d.innerHTML=`<i>${n++}</i>${t}`;box.appendChild(d)});
+  host.appendChild(s);
+});
+// reveal on scroll
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('show');io.unobserve(x.target)}}),{threshold:.2});
+document.querySelectorAll('.card').forEach((c,i)=>{c.style.transitionDelay=(i%4)*80+'ms';io.observe(c)});
+// typewriter
+const lines=["Every sacrifice has a name.","Every late night has a reason.","This year, I make it count."];
+(function(){const el=document.getElementById('type');let l=0,i=0,del=false;
+ (function tick(){const t=lines[l];el.textContent=t.slice(0,i)+'▌';
+  if(!del&&i<t.length){i++;setTimeout(tick,60)}else if(!del){del=true;setTimeout(tick,1600)}
+  else if(i>0){i--;setTimeout(tick,28)}else{del=false;l=(l+1)%lines.length;setTimeout(tick,300)}})()})();
+// countdown to 1 Jan 2027
+const cd=document.getElementById('count');
+function upd(){let d=new Date('2027-01-01T00:00:00')-new Date();if(d<0)d=0;
+ const v=[Math.floor(d/864e5),Math.floor(d/36e5)%24,Math.floor(d/6e4)%60,Math.floor(d/1e3)%60],L=['days','hours','mins','secs'];
+ cd.innerHTML=v.map((x,i)=>`<div><b>${String(x).padStart(2,'0')}</b><span>${L[i]}</span></div>`).join('')}
+upd();setInterval(upd,1000);
+// starry sky + shooting stars
+const cv=document.getElementById('sky'),cx=cv.getContext('2d');let W,H,stars=[],shots=[];
+function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight;stars=Array.from({length:Math.min(160,W/6)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.6+.3,s:Math.random()*.4+.05,p:Math.random()*6}))}
+rs();addEventListener('resize',rs);
+(function draw(t){cx.clearRect(0,0,W,H);
+ stars.forEach(a=>{a.y-=a.s;if(a.y<0)a.y=H;cx.globalAlpha=.4+.6*Math.abs(Math.sin(t/900+a.p));cx.fillStyle='#fff';cx.beginPath();cx.arc(a.x,a.y,a.r,0,7);cx.fill()});
+ if(Math.random()<.012)shots.push({x:Math.random()*W,y:0,l:0});
+ shots=shots.filter(s=>{s.x-=9;s.y+=5;s.l++;cx.globalAlpha=1-s.l/50;cx.strokeStyle='#ffc857';cx.lineWidth=2;cx.beginPath();cx.moveTo(s.x,s.y);cx.lineTo(s.x+60,s.y-33);cx.stroke();return s.l<50});
+ requestAnimationFrame(draw)})(0);
+// confetti on click
+addEventListener('click',e=>{if(e.target.closest('#dock,#start,#env,.pol,#nav'))return;for(let i=0;i<14;i++){const f=document.createElement('div');f.textContent=['✨','💛','⭐','🔥'][i%4];f.style.cssText=`position:fixed;left:${e.clientX}px;top:${e.clientY}px;z-index:70;pointer-events:none;font-size:18px;transition:all 1s ease-out`;document.body.appendChild(f);
+ requestAnimationFrame(()=>{f.style.transform=`translate(${(Math.random()-.5)*220}px,${Math.random()*-200}px) rotate(${Math.random()*360}deg)`;f.style.opacity=0});setTimeout(()=>f.remove(),1000)}});
+
+// ===== MUSIC =====
+// Default: a soft original melody made live with the Web Audio API (no copyright issues).
+// If song.mp3 exists beside this file, or the visitor picks a file, that plays instead.
+const song=document.getElementById('song'),dock=document.getElementById('dock');
+let ac,master,timer,playing=false,mode='synth',step=0,next=0;
+const CH=[[57,60,64],[53,57,60],[48,52,55],[55,59,62]]; // Am F C G
+const mf=m=>440*Math.pow(2,(m-69)/12);
+function note(f,t,d,v,type){const o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=f;
+ g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+.03);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+ o.connect(g);g.connect(master);o.start(t);o.stop(t+d+.05)}
+function sched(){while(next<ac.currentTime+.4){const bar=Math.floor(step/8)%4,ch=CH[bar],k=step%8;
+ if(k===0){ch.forEach(m=>note(mf(m-12),next,3.2,.05,'sine'));note(mf(ch[0]-24),next,3,.12,'triangle')}
+ const arp=[0,1,2,1,2,1,2,1][k];note(mf(ch[arp]+12),next,.9,.07,'triangle');
+ if(k===0&&bar%2===1)note(mf(ch[2]+24),next+.3,1.6,.05,'sine');
+ next+=.375;step++}}
+function startSynth(){if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)();master=ac.createGain();master.gain.value=.9;
+  const dl=ac.createDelay();dl.delayTime.value=.375;const fb=ac.createGain();fb.gain.value=.35;master.connect(dl);dl.connect(fb);fb.connect(dl);dl.connect(ac.destination);master.connect(ac.destination)}
+ ac.resume();next=ac.currentTime+.05;timer=setInterval(sched,100)}
+function play(){playing=true;dock.classList.add('on');
+ if(mode==='file'){song.play().catch(()=>{});return}
+ song.preload='auto';song.play().then(()=>{mode='file'}).catch(()=>{mode='synth';startSynth()})}
+function pause(){playing=false;dock.classList.remove('on');song.pause();clearInterval(timer);if(ac)ac.suspend()}
+document.getElementById('play').onclick=()=>playing?pause():play();
+document.getElementById('go').onclick=()=>{play();hide()};
+document.getElementById('mute').onclick=hide;
+function hide(){setTimeout(()=>toast(),900);const s=document.getElementById('start');s.style.opacity=0;setTimeout(()=>s.remove(),800)}
+document.getElementById('file').onchange=e=>{const f=e.target.files[0];if(!f)return;pause();song.src=URL.createObjectURL(f);mode='file';play()};
+
+// ===== STUDY MODE =====
+const ALL=PARTS.flatMap(p=>p.items);
+const rEl=document.getElementById('reason');
+function newReason(){rEl.style.opacity=0;setTimeout(()=>{rEl.textContent=ALL[Math.floor(Math.random()*ALL.length)];rEl.style.opacity=1},400)}
+newReason();setInterval(newReason,20000);
+let dur=25*60,left=dur,run=null;
+const tm=document.getElementById('tm'),st=document.getElementById('st');
+const fmt=x=>String(Math.floor(x/60)).padStart(2,'0')+':'+String(x%60).padStart(2,'0');
+const store={get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const today=()=>new Date().toDateString();
+function stats(){const d=store.get('st27',{day:'',n:0,tot:0,streak:0,last:''});if(d.day!==today()){d.day=today();d.n=0}return d}
+function showStats(){const d=stats();s1.textContent=d.n;s2.textContent=d.streak;s3.textContent=d.tot}
+showStats();
+function burst(x,y,n=24){for(let i=0;i<n;i++){const f=document.createElement('div');f.textContent=['✨','💛','⭐','🔥','🎉'][i%5];f.style.cssText=`position:fixed;left:${x}px;top:${y}px;z-index:70;pointer-events:none;font-size:22px;transition:all 1.4s ease-out`;document.body.appendChild(f);requestAnimationFrame(()=>{f.style.transform=`translate(${(Math.random()-.5)*500}px,${(Math.random()-.8)*400}px) rotate(${Math.random()*720}deg)`;f.style.opacity=0});setTimeout(()=>f.remove(),1400)}}
+function done(){clearInterval(run);run=null;st.textContent='Start focus';left=dur;tm.textContent=fmt(left);
+ const d=stats(),y=new Date(Date.now()-864e5).toDateString();
+ if(d.last!==today()){d.streak=(d.last===y)?d.streak+1:1;d.last=today()}
+ d.n++;d.tot+=dur/60;store.set('st27',d);showStats();burst(innerWidth/2,innerHeight/2,40);
+ try{const a=new (window.AudioContext||window.webkitAudioContext)();[523,659,784,1047].forEach((f,i)=>{const o=a.createOscillator(),g=a.createGain();o.frequency.value=f;g.gain.value=.15;g.gain.exponentialRampToValueAtTime(.001,a.currentTime+i*.25+.5);o.connect(g);g.connect(a.destination);o.start(a.currentTime+i*.25);o.stop(a.currentTime+i*.25+.5)})}catch(e){}
+ rEl.textContent='You did it. One more step toward Offer Day. 💛'}
+st.onclick=()=>{if(run){clearInterval(run);run=null;st.textContent='Resume';return}
+ st.textContent='Pause';newReason();run=setInterval(()=>{left--;tm.textContent=fmt(left);document.title=fmt(left)+' | Focus';if(left<=0){document.title='My 2027 List';done()}},1000)};
+document.getElementById('rs').onclick=()=>{clearInterval(run);run=null;left=dur;tm.textContent=fmt(left);st.textContent='Start focus'};
+document.querySelectorAll('#modes button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#modes button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');dur=+b.dataset.m*60;left=dur;tm.textContent=fmt(left);clearInterval(run);run=null;st.textContent='Start focus'});
+// ===== OFFER LETTER =====
+document.getElementById('env').onclick=e=>{document.getElementById('env').style.display='none';document.getElementById('eh').style.display='none';document.getElementById('letter').classList.add('open');burst(innerWidth/2,innerHeight/2,50)};
+// ===== NAME =====
+const nmI=document.getElementById('nm');nmI.value=store.get('nm27','');
+function applyName(){const v=nmI.value.trim();if(v){store.set('nm27',v);document.querySelector('.who').textContent=v;lines[0]=v+', every sacrifice has a name.'}}
+applyName();document.getElementById('go').addEventListener('click',applyName);document.getElementById('mute').addEventListener('click',applyName);
+
+// ===== TODAY'S PLAN =====
+let tasks=store.get('td27',[]);
+const tl=document.getElementById('tl');
+function drawT(){tl.innerHTML='';tasks.forEach((t,i)=>{const li=document.createElement('li');if(t.d)li.className='d';
+ li.innerHTML=`<input type="checkbox" ${t.d?'checked':''}><span></span><b title="delete">✕</b>`;li.querySelector('span').textContent=t.t;
+ li.querySelector('input').onchange=e=>{t.d=e.target.checked;store.set('td27',tasks);drawT();if(t.d&&tasks.every(x=>x.d)){burst(innerWidth/2,innerHeight/2,50);toast('All done today. Proud of you! 💛')}};
+ li.querySelector('b').onclick=()=>{tasks.splice(i,1);store.set('td27',tasks);drawT()};tl.appendChild(li)});
+ const dn=tasks.filter(x=>x.d).length,p=tasks.length?Math.round(dn/tasks.length*100):0;
+ document.querySelector('#pg i').style.width=p+'%';document.getElementById('pt').textContent=tasks.length?`${dn} of ${tasks.length} done (${p}%)`:'Add your first goal for today'}
+function addT(){const v=ti.value.trim();if(!v)return;tasks.push({t:v,d:false});ti.value='';store.set('td27',tasks);drawT()}
+ta.onclick=addT;ti.onkeydown=e=>{if(e.key==='Enter')addT()};
+tc.onclick=()=>{tasks=tasks.filter(x=>!x.d);store.set('td27',tasks);drawT()};drawT();
+// ===== VISION WALL =====
+const SL=[['🚗','My car'],['🏠','My house'],['🏢','My dream office'],['💛','My family']];
+let vw=store.get('vw27',{}),cur=null;const wall=document.getElementById('wall');
+SL.forEach((x,i)=>{const d=document.createElement('div');d.className='pol';d.innerHTML=`<div>${x[0]}</div><p>${x[1]}</p>`;
+ if(vw[i])d.firstChild.style.cssText=`background-image:url(${vw[i]});font-size:0`;
+ d.onclick=()=>{cur=i;vf.click()};wall.appendChild(d)});
+vf.onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),m=360,r=Math.min(1,m/Math.max(im.width,im.height));c.width=im.width*r;c.height=im.height*r;c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+ vw[cur]=c.toDataURL('image/jpeg',.75);store.set('vw27',vw);const b=wall.children[cur].firstChild;b.style.cssText=`background-image:url(${vw[cur]});font-size:0`;burst(innerWidth/2,innerHeight/2,18)};im.src=URL.createObjectURL(f);vf.value=''};
+an.value=store.get('an27','');an.oninput=()=>store.set('an27',an.value);
+// ===== DAILY TOAST =====
+let tt;function toast(m){const t=document.getElementById('toast');t.textContent=m||('Today’s reminder: '+ALL[Math.floor(Math.random()*ALL.length)]);t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),6000)}
+
+// ===== PAGES =====
+const pages=[...document.querySelectorAll('section')];let pi=0;
+const dots=document.getElementById('dots'),bk=document.getElementById('bk'),nx=document.getElementById('nx');
+pages.forEach((p,k)=>{const d=document.createElement('i');d.onclick=()=>showPage(k);dots.appendChild(d)});
+function showPage(i){pi=Math.max(0,Math.min(pages.length-1,i));
+ pages.forEach((p,k)=>p.classList.toggle('act',k===pi));
+ [...dots.children].forEach((d,k)=>d.classList.toggle('on',k===pi));
+ document.getElementById('bar').style.width=((pi+1)/pages.length*100)+'%';
+ bk.disabled=pi===0;nx.textContent=pi===pages.length-1?'Start over ↺':'Next →';
+ scrollTo(0,0);
+ pages[pi].querySelectorAll('.card:not(.show)').forEach(c=>c.classList.add('show'))}
+nx.onclick=()=>showPage(pi===pages.length-1?0:pi+1);bk.onclick=()=>showPage(pi-1);
+addEventListener('keydown',e=>{if(/INPUT|TEXTAREA/.test(document.activeElement.tagName))return;if(e.key==='ArrowRight')nx.click();if(e.key==='ArrowLeft')bk.click()});
+let tx=0,ty=0;addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;if(Math.abs(dx)>70&&Math.abs(dy)<50&&!e.target.closest('input,textarea')){dx<0?nx.click():bk.click()}},{passive:true});
+showPage(0);
+</script>
+</body>
+</html>
